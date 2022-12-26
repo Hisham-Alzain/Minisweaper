@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
  */
-
 package aggrigation.minisweaper;
+
 import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
+
 /**
  *
  * @author ASUS
@@ -87,7 +88,7 @@ public class Minisweaper {
         return (x >= 0 && x < 10 && y >= 0 && y < 10);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(System.in);
         int k = 0;
         cell[][] game = new cell[10][10];
@@ -98,6 +99,13 @@ public class Minisweaper {
         }
         int[] movex = {1, 1, 1, 0, 0, -1, -1, -1};
         int[] movey = {1, -1, 0, 1, -1, 0, 1, -1};
+        Menu men=new Menu();
+        System.out.println("welcome to minesweaper by y3hw");
+        System.out.println("if you want to load a saved game enter 1");
+        System.out.println("if you want to start a new game enter any");
+        int w=in.nextInt();
+        if(w==1)
+            game=men.load(game);
         while (true) {
             print(game);
             int x, y;
@@ -209,7 +217,23 @@ public class Minisweaper {
                             File f = new File("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\Savedgames\\" + name);
                             if (f.createNewFile()) {
                                 FileOutputStream fw = new FileOutputStream(f);
-                                fw.write(game.toString().getBytes());
+                                String s = "";
+                                for (int i = 0; i < 10; i++) {
+                                    for (int j = 0; j < 10; j++) {
+                                        if (game[i][j].show) {
+                                            if (game[i][j].isFlaged) {
+                                                s += "F ";
+                                            } else {
+                                                s += game[i][j].NoBomb;
+                                                s += " ";
+                                            }
+                                        } else {
+                                            s += "? ";
+                                        }
+                                    }
+                                    s += "\r\n";
+                                }
+                                fw.write(s.getBytes());
                                 fw.flush();
                                 fw.close();
                                 System.out.println("Your game is saved");
