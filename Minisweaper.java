@@ -4,6 +4,7 @@
  */
 
 package aggrigation.minisweaper;
+import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 /**
@@ -21,34 +22,40 @@ public class Minisweaper {
             System.out.println();
         }
     }
-    public static int calculateScore(cell[][] game){
-       int score=0;
-       for (int i = 0; i < 10; i++) {
+
+    public static int calculateScore(cell[][] game) {
+        int score = 0;
+        for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                if(game[i][j].show){
-                    score+=game[i][j].NoBomb;
+                if (game[i][j].show) {
+                    score += game[i][j].NoBomb;
                 }
-                if(game[i][j].isFlaged){
-                    if(game[i][j].bomb)
-                        score+=5;
-                    else
-                        score-=0;
+                if (game[i][j].isFlaged) {
+                    if (game[i][j].bomb) {
+                        score += 5;
+                    } else {
+                        score -= 0;
+                    }
                 }
             }
-       }
-       return score;
-   }
+        }
+        return score;
+    }
 
     public static boolean allNumShown(cell[][] game) {
         int v = 0;
-        for (int i = 0; i < 10; i++) 
-            for (int j = 0; j < 10; j++) 
-                if (!game[i][j].bomb) 
-                    if (game[i][j].show) 
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (!game[i][j].bomb) {
+                    if (game[i][j].show) {
                         v++;
-        return v ==90;
+                    }
+                }
+            }
+        }
+        return v == 90;
     }
-    
+
     public static void printNshow(cell[][] game) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -93,15 +100,15 @@ public class Minisweaper {
         int[] movey = {1, -1, 0, 1, -1, 0, 1, -1};
         while (true) {
             print(game);
-            int x,y;
-            try{
-            System.out.println("Enter a cell coordinates ( 0,0 is the first cell)");
-            String m = in.next();
-            String[] c = new String[2];
-            c = m.split(",");
-             x = Integer.parseInt(c[0]);
-             y = Integer.parseInt(c[1]);
-            }catch(NumberFormatException e){
+            int x, y;
+            try {
+                System.out.println("Enter a cell coordinates ( 0,0 is the first cell)");
+                String m = in.next();
+                String[] c = new String[2];
+                c = m.split(",");
+                x = Integer.parseInt(c[0]);
+                y = Integer.parseInt(c[1]);
+            } catch (NumberFormatException e) {
                 System.out.println(e);
                 continue;
             }
@@ -119,27 +126,24 @@ public class Minisweaper {
                 }
                 callNoBomb(game);
             }
-            if(true){
-                printNshow(game);
-                break;
-            }
             int d;
             do {
                 System.out.println("Enter an action");
                 System.out.println("1 to Flag a cell");
                 System.out.println("2 to Press a cell");
                 System.out.println("3 to unflag a cell");
+                System.out.println("4 to exit");
                 d = in.nextInt();
-                if (d == 1 || d == 2 || d == 3) {
+                if (d == 1 || d == 2 || d == 3 || d == 4) {
                     break;
                 }
                 System.out.println("wrong number");
             } while (true);
             if (allNumShown(game)) {
-                        System.out.println("You have won");
-                        System.out.println(calculateScore(game));
-                        break;
-                    }
+                System.out.println("You have won");
+                System.out.println(calculateScore(game));
+                break;
+            }
             if (d == 1) {
                 if (!game[x][y].isFlaged) {
                     game[x][y].isFlaged = true;
@@ -157,11 +161,14 @@ public class Minisweaper {
                 }
                 game[x][y].show = true;
 
-                for(int i=0;i<8;i++){
-                    if(MoveisSafe(x+movex[i],y+movey[i]))
-                        if(!game[x+movex[i]][y+movey[i]].bomb)
-                            game[x+movex[i]][y+movey[i]].show=true;
-                   }
+                for (int i = 0; i < 8; i++) {
+                    if (MoveisSafe(x + movex[i], y + movey[i])) {
+                        if (!game[x + movex[i]][y + movey[i]].bomb) {
+                            game[x + movex[i]][y + movey[i]].show = true;
+                        }
+                    }
+                }
+            }
 //                if(k==0){
 //                for(int i=0;i<8;i++){
 //                    int j=0;
@@ -176,16 +183,47 @@ public class Minisweaper {
 //                    }
 //                }
 //            }
-                if (d == 3) {
-                    if (game[x][y].isFlaged) {
-                        game[x][y].isFlaged = false;
-                        game[x][y].show = false;
-                    } else {
-                        System.out.println("(" + x + "," + y + ") is not flagged");
-                    }
+            if (d == 3) {
+                if (game[x][y].isFlaged) {
+                    game[x][y].isFlaged = false;
+                    game[x][y].show = false;
+                } else {
+                    System.out.println("(" + x + "," + y + ") is not flagged");
                 }
-                k++;
             }
+            if (d == 4) {
+                System.out.println("enter 1 if you want to return to the game");
+                System.out.println("enter 2 if you want to leave without a save");
+                System.out.println("enter 3 if you want to save and leave the game");
+                try {
+                    int h = in.nextInt();
+                    if (h == 1) {
+                        continue;
+                    } else if (h == 2) {
+                        break;
+                    } else if (h == 3) {
+                        System.out.println("Enter file name (must have txt extintion)");
+                        String name = in.next();
+
+                        try {
+                            File f = new File("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\Savedgames\\" + name);
+                            if (f.createNewFile()) {
+                                FileOutputStream fw = new FileOutputStream(f);
+                                fw.write(game.toString().getBytes());
+                                fw.flush();
+                                fw.close();
+                                System.out.println("Your game is saved");
+                                break;
+                            }
+                        } catch (IOException e) {
+                            System.out.println(e);
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println(e);
+                }
+            }
+            k++;
         }
     }
 }
