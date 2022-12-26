@@ -21,19 +21,34 @@ public class Minisweaper {
             System.out.println();
         }
     }
-    public static boolean allBombFlaged(cell[][] game){
-        int v=0;
-        for(int i=0;i<10;i++){
-            for(int j=0;j<10;j++){
-                if(game[i][j].bomb){
-                    if(game[i][j].isFlaged){
-                        v++;
-                    }
+    public static int calculateScore(cell[][] game){
+       int score=0;
+       for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if(game[i][j].show){
+                    score+=game[i][j].NoBomb;
+                }
+                if(game[i][j].isFlaged){
+                    if(game[i][j].bomb)
+                        score+=5;
+                    else
+                        score-=0;
                 }
             }
-        }
-        return v==10;
+       }
+       return score;
+   }
+
+    public static boolean allNumShown(cell[][] game) {
+        int v = 0;
+        for (int i = 0; i < 10; i++) 
+            for (int j = 0; j < 10; j++) 
+                if (!game[i][j].bomb) 
+                    if (game[i][j].show) 
+                        v++;
+        return v ==90;
     }
+    
     public static void printNshow(cell[][] game) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -120,14 +135,15 @@ public class Minisweaper {
                 }
                 System.out.println("wrong number");
             } while (true);
+            if (allNumShown(game)) {
+                        System.out.println("You have won");
+                        System.out.println(calculateScore(game));
+                        break;
+                    }
             if (d == 1) {
                 if (!game[x][y].isFlaged) {
                     game[x][y].isFlaged = true;
                     game[x][y].show = true;
-                    if(allBombFlaged(game)){
-                        System.out.println("You have won");
-                        break;
-                    }
                 } else {
                     System.out.println("(" + x + "," + y + ") is already flagged");
                 }
@@ -135,6 +151,7 @@ public class Minisweaper {
             if (d == 2) {
                 if (game[x][y].bomb) {
                     System.out.println("You Lost");
+                    System.out.println(calculateScore(game));
                     printNshow(game);
                     break;
                 }
