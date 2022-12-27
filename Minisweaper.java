@@ -35,7 +35,7 @@ public class Minisweaper {
                     if (game[i][j].bomb) {
                         score += 5;
                     } else {
-                        score -= 0;
+                        score -= 1;
                     }
                 }
             }
@@ -90,7 +90,7 @@ public class Minisweaper {
 
     public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(System.in);
-        int k = 0;
+        int k = 0, score1 = 0, score2 = 0;
         cell[][] game = new cell[10][10];
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -99,18 +99,28 @@ public class Minisweaper {
         }
         int[] movex = {1, 1, 1, 0, 0, -1, -1, -1};
         int[] movey = {1, -1, 0, 1, -1, 0, 1, -1};
-        Menu men=new Menu();
+        Menu men = new Menu();
         System.out.println("welcome to minesweaper by y3hw");
         System.out.println("if you want to load a saved game enter 1");
-        System.out.println("if you want to start a new game enter any");
-        int w=in.nextInt();
-        if(w==1)
-            game=men.load(game);
+        System.out.println("if you want to start a new multiPlayer game enter 2");
+        System.out.println("if you want to start a new singlePlayer game enter any");
+        int w = in.nextInt();
+        if (w == 1) {
+            game = men.load(game);
+        }
         while (true) {
             print(game);
             int x, y;
             try {
-                System.out.println("Enter a cell coordinates ( 0,0 is the first cell)");
+                if (w == 2) {
+                    if (k % 2 == 0) {
+                        System.out.println("Player 1 Enter a cell coordinates ( 0,0 is the first cell)");
+                    } else if (k % 2 == 1) {
+                        System.out.println("Player 2 Enter a cell coordinates ( 0,0 is the first cell)");
+                    }
+                } else {
+                    System.out.println("Enter a cell coordinates ( 0,0 is the first cell)");
+                }
                 String m = in.next();
                 String[] c = new String[2];
                 c = m.split(",");
@@ -156,6 +166,21 @@ public class Minisweaper {
                 if (!game[x][y].isFlaged) {
                     game[x][y].isFlaged = true;
                     game[x][y].show = true;
+                    if (w == 2) {
+                        if (game[x][y].bomb == true) {
+                            if (k % 2 == 0) {
+                                score1 += 5;
+                            } else {
+                                score2 += 5;
+                            }
+                        } else {
+                            if (k % 2 == 0) {
+                                score1 -= 1;
+                            } else {
+                                score2 -= 1;
+                            }
+                        }
+                    }
                 } else {
                     System.out.println("(" + x + "," + y + ") is already flagged");
                 }
@@ -173,6 +198,14 @@ public class Minisweaper {
                     if (MoveisSafe(x + movex[i], y + movey[i])) {
                         if (!game[x + movex[i]][y + movey[i]].bomb) {
                             game[x + movex[i]][y + movey[i]].show = true;
+                            if (w == 2) {
+                                if (k % 2 == 0) {
+                                    score1 += game[x + movex[i]][y + movey[i]].NoBomb;
+                                } else {
+                                    score2 += game[x + movex[i]][y + movey[i]].NoBomb;
+                                }
+                            }
+
                         }
                     }
                 }
@@ -195,59 +228,75 @@ public class Minisweaper {
                 if (game[x][y].isFlaged) {
                     game[x][y].isFlaged = false;
                     game[x][y].show = false;
-                } else {
-                    System.out.println("(" + x + "," + y + ") is not flagged");
-                }
-            }
-            if (d == 4) {
-                System.out.println("enter 1 if you want to return to the game");
-                System.out.println("enter 2 if you want to leave without a save");
-                System.out.println("enter 3 if you want to save and leave the game");
-                try {
-                    int h = in.nextInt();
-                    if (h == 1) {
-                        continue;
-                    } else if (h == 2) {
-                        break;
-                    } else if (h == 3) {
-                        System.out.println("Enter file name (must have txt extintion)");
-                        String name = in.next();
-
-                        try {
-                            File f = new File("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\Savedgames\\" + name);
-                            if (f.createNewFile()) {
-                                FileOutputStream fw = new FileOutputStream(f);
-                                String s = "";
-                                for (int i = 0; i < 10; i++) {
-                                    for (int j = 0; j < 10; j++) {
-                                        if (game[i][j].show) {
-                                            if (game[i][j].isFlaged) {
-                                                s += "F ";
-                                            } else {
-                                                s += game[i][j].NoBomb;
-                                                s += " ";
-                                            }
-                                        } else {
-                                            s += "? ";
-                                        }
-                                    }
-                                    s += "\r\n";
-                                }
-                                fw.write(s.getBytes());
-                                fw.flush();
-                                fw.close();
-                                System.out.println("Your game is saved");
-                                break;
+                    if (w == 2) {
+                        if (game[x][y].bomb == true) {
+                            if (k % 2 == 0) {
+                                score1 += 1;
+                            } else {
+                                score2 += 5;
                             }
-                        } catch (IOException e) {
-                            System.out.println(e);
+                        } else {
+                            if (k % 2 == 0) {
+                                score1 -= 5;
+                            } else {
+                                score2 -= 5;
+                            }
                         }
+
+                    } else {
+                        System.out.println("(" + x + "," + y + ") is not flagged");
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println(e);
                 }
+                if (d == 4) {
+                    System.out.println("enter 1 if you want to return to the game");
+                    System.out.println("enter 2 if you want to leave without a save");
+                    System.out.println("enter 3 if you want to save and leave the game");
+                    try {
+                        int h = in.nextInt();
+                        if (h == 1) {
+                            continue;
+                        } else if (h == 2) {
+                            break;
+                        } else if (h == 3) {
+                            System.out.println("Enter file name (must have txt extintion)");
+                            String name = in.next();
+
+                            try {
+                                File f = new File("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\Savedgames\\" + name);
+                                if (f.createNewFile()) {
+                                    FileOutputStream fw = new FileOutputStream(f);
+                                    String s = "";
+                                    for (int i = 0; i < 10; i++) {
+                                        for (int j = 0; j < 10; j++) {
+                                            if (game[i][j].show) {
+                                                if (game[i][j].isFlaged) {
+                                                    s += "F ";
+                                                } else {
+                                                    s += game[i][j].NoBomb;
+                                                    s += " ";
+                                                }
+                                            } else {
+                                                s += "? ";
+                                            }
+                                        }
+                                        s += "\r\n";
+                                    }
+                                    fw.write(s.getBytes());
+                                    fw.flush();
+                                    fw.close();
+                                    System.out.println("Your game is saved");
+                                    break;
+                                }
+                            } catch (IOException e) {
+                                System.out.println(e);
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println(e);
+                    }
+                }
+                k++;
             }
-            k++;
         }
     }
 }
