@@ -108,7 +108,7 @@ public class Minisweaper {
         if (w == 1) {
             game = men.load(game);
         }
-        while (true) {
+        while (!allNumShown(game)) {
             print(game);
             int x, y;
             try {
@@ -157,11 +157,6 @@ public class Minisweaper {
                 }
                 System.out.println("wrong number");
             } while (true);
-            if (allNumShown(game)) {
-                System.out.println("You have won");
-                System.out.println(calculateScore(game));
-                break;
-            }
             if (d == 1) {
                 if (!game[x][y].isFlaged) {
                     game[x][y].isFlaged = true;
@@ -247,6 +242,7 @@ public class Minisweaper {
                         System.out.println("(" + x + "," + y + ") is not flagged");
                     }
                 }
+            }
                 if (d == 4) {
                     System.out.println("enter 1 if you want to return to the game");
                     System.out.println("enter 2 if you want to leave without a save");
@@ -256,6 +252,12 @@ public class Minisweaper {
                         if (h == 1) {
                             continue;
                         } else if (h == 2) {
+                            if(w==2){
+                            System.out.println("Player 1 score is "+score1);
+                            System.out.println("Player 2 score is "+score2);
+                            }
+                            else
+                                System.out.println("Your Score is "+calculateScore(game));
                             break;
                         } else if (h == 3) {
                             System.out.println("Enter file name (must have txt extintion)");
@@ -295,8 +297,16 @@ public class Minisweaper {
                         System.out.println(e);
                     }
                 }
-                k++;
+              k++;  
+            }
+             if (allNumShown(game)) {
+                System.out.println("You have won");
+                if(w==2){
+                    System.out.println("Player 1 score is "+score1);
+                    System.out.println("Player 2 score is "+score2);
+                }
+                else
+                    System.out.println("Your Score is "+calculateScore(game));
             }
         }
     }
-}
