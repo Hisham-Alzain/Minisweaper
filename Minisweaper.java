@@ -13,7 +13,9 @@ import java.util.Scanner;
  * @author ASUS
  */
 public class Minisweaper {
-
+    
+    public static cell[][] game = new cell[10][10];
+    public static int score1 = 0, score2 = 0;
     public static void print(cell[][] game) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -87,11 +89,29 @@ public class Minisweaper {
     public static boolean MoveisSafe(int x, int y) {
         return (x >= 0 && x < 10 && y >= 0 && y < 10);
     }
+    
+    public static void floodfill(int x,int y,int w,int k){
+        int[] movex = {1, 1, 1, 0, 0, -1, -1, -1};
+        int[] movey = {1, -1, 0, 1, -1, 0, 1, -1};
+        if( !MoveisSafe(x,y) || game[x][y].bomb || game[x][y].show){
+            return;
+        }
+        game[x][y].show=true;
+        if(w==2){
+            if(w%k==0)
+                score1+=game[x][y].NoBomb;
+            if(w%k==1)
+                score2+=game[x][y].NoBomb;
+         }
+        if(game[x][y].NoBomb==0)
+            for(int i=0;i<8;i++){
+                floodfill(x+movex[i],y+movey[i],w,k);
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(System.in);
-        int k = 0, score1 = 0, score2 = 0;
-        cell[][] game = new cell[10][10];
+        int k = 0;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 game[i][j] = new cell();
@@ -151,10 +171,13 @@ public class Minisweaper {
                 System.out.println("2 to Press a cell");
                 System.out.println("3 to unflag a cell");
                 System.out.println("4 to exit");
-                d = in.nextInt();
-                if (d == 1 || d == 2 || d == 3 || d == 4) {
-                    break;
-                }
+                System.out.println("5 to go back");
+                try{
+                    d = in.nextInt();  
+                    if (d == 1 || d == 2 || d == 3 || d == 4) {
+                        break;
+                    }
+                }catch(Exception e){}
                 System.out.println("wrong number");
             } while (true);
             if (d == 1) {
@@ -187,38 +210,8 @@ public class Minisweaper {
                     printNshow(game);
                     break;
                 }
-                game[x][y].show = true;
-
-                for (int i = 0; i < 8; i++) {
-                    if (MoveisSafe(x + movex[i], y + movey[i])) {
-                        if (!game[x + movex[i]][y + movey[i]].bomb) {
-                            game[x + movex[i]][y + movey[i]].show = true;
-                            if (w == 2) {
-                                if (k % 2 == 0) {
-                                    score1 += game[x + movex[i]][y + movey[i]].NoBomb;
-                                } else {
-                                    score2 += game[x + movex[i]][y + movey[i]].NoBomb;
-                                }
-                            }
-
-                        }
-                    }
-                }
+                floodfill(x,y,w,k);
             }
-//                if(k==0){
-//                for(int i=0;i<8;i++){
-//                    int j=0;
-//                    if(MoveisSafe(x+movex[i],y+movey[i])){
-//                        while(!game[x+movex[i]][y+movey[i]].bomb && game[x+movex[i]][y+movey[i]].NoBomb==0){
-//                            if(MoveisSafe(x+movex[i]+movex[j],y+movey[i]+movey[j]))
-//                                game[x+movex[i]+movex[j]][y+movey[i]+movey[j]].show=true;
-//                             j++;
-//                             if(j==8)
-//                                break;
-//                        }
-//                    }
-//                }
-//            }
             if (d == 3) {
                 if (game[x][y].isFlaged) {
                     game[x][y].isFlaged = false;
@@ -296,6 +289,9 @@ public class Minisweaper {
                     } catch (NumberFormatException e) {
                         System.out.println(e);
                     }
+                }
+                if(d==5){
+                    continue;
                 }
               k++;  
             }
