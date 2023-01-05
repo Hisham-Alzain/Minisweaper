@@ -1,157 +1,11 @@
 package aggrigation.minisweaper;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.*;
+import javax.swing.*;
+import java.util.*;
 
-;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.MouseListener;
-import javax.swing.ImageIcon;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.MouseEvent;
-import javax.swing.ImageIcon;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.MouseListener;
-import javax.swing.ImageIcon;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import javax.swing.ImageIcon;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.MouseListener;
-import javax.swing.ImageIcon;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.MouseEvent;
-import javax.swing.ImageIcon;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.MouseListener;
-import javax.swing.ImageIcon;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import javax.swing.ImageIcon;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 
 
@@ -161,7 +15,6 @@ public class Grid extends JPanel {
     private static final int NUM_COLS = 10;
     private static final int NUM_MINES = 10; // Number of mines to be placed
     private static final Random RANDOM = new Random(); // Random number generator
-    private List<int[]> mineLocations;
     private cell[][] buttons;
     private Minisweaper minis;
     int w = 0, k = 0;
@@ -310,7 +163,6 @@ public class Grid extends JPanel {
 
             // Check if we clicked on bomb button
             if (minis.game[x][y].bomb) {
-                System.out.println("this is bomb");
                 //JLabel Creation
 //                JLabel mine = new JLabel();
                 // Sets the image to be displayed as an icon
@@ -321,6 +173,10 @@ public class Grid extends JPanel {
                 // Sets the location and dimention of the image
                 minis.game[x][y].setBackground(new Color(255, 0, 0));
                 showAll();
+                
+                // open losing frame
+                Losing lose = new Losing(minis.calculateScore());
+                
             } else {
                 minis.floodfill(x, y);
                 setShowedCellsText();
