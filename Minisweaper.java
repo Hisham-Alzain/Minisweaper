@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
- */
 package aggrigation.minisweaper;
 
 import java.io.*;
@@ -13,6 +9,15 @@ import java.util.Scanner;
  * @author ASUS
  */
 public class Minisweaper {
+    
+    public Minisweaper() {
+        // Create game board
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                game[i][j] = new cell();
+            }
+        }
+    }
     
     public static cell[][] game = new cell[10][10];
     public static int score1 = 0, score2 = 0;
@@ -45,7 +50,7 @@ public class Minisweaper {
         return score;
     }
 
-    public static boolean allNumShown(cell[][] game) {
+    public static boolean allNumShown() {
         int v = 0;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -59,7 +64,7 @@ public class Minisweaper {
         return v == 90;
     }
 
-    public static void printNshow(cell[][] game) {
+    public static void printNshow() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 game[i][j].show = true;
@@ -90,33 +95,44 @@ public class Minisweaper {
         return (x >= 0 && x < 10 && y >= 0 && y < 10);
     }
     
-    public static void floodfill(int x,int y,int w,int k){
+    public static void floodfill(int x,int y){
         int[] movex = {1, 1, 1, 0, 0, -1, -1, -1};
         int[] movey = {1, -1, 0, 1, -1, 0, 1, -1};
         if( !MoveisSafe(x,y) || game[x][y].bomb || game[x][y].show){
             return;
         }
         game[x][y].show=true;
-        if(w==2){
-            if(w%k==0)
-                score1+=game[x][y].NoBomb;
-            if(w%k==1)
-                score2+=game[x][y].NoBomb;
-         }
+//        if(w==2){
+//            if(w%k==0)
+//                score1+=game[x][y].NoBomb;
+//            if(w%k==1)
+//                score2+=game[x][y].NoBomb;
+//         }
         if(game[x][y].NoBomb==0)
             for(int i=0;i<8;i++){
-                floodfill(x+movex[i],y+movey[i],w,k);
+                floodfill(x+movex[i],y+movey[i]);
         }
     }
 
+    public static void setBombsPlaces(int x, int y) {
+        for (int i = 0; i < 10; i++) {
+                    Random rand = new Random();
+                    // Obtain a number between [0 - 9].
+                    int box = rand.nextInt(10);
+                    int boy = rand.nextInt(10);
+                    if (box == x && boy == y) {
+                        i--;
+                        continue;
+                    }
+                    game[box][boy].bomb = true;
+                }
+                callNoBomb(game);
+    }
+    
     public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(System.in);
         int k = 0;
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                game[i][j] = new cell();
-            }
-        }
+        
         int[] movex = {1, 1, 1, 0, 0, -1, -1, -1};
         int[] movey = {1, -1, 0, 1, -1, 0, 1, -1};
         Menu men = new Menu();
@@ -151,18 +167,7 @@ public class Minisweaper {
                 continue;
             }
             if (k == 0) {
-                for (int i = 0; i < 10; i++) {
-                    Random rand = new Random();
-                    // Obtain a number between [0 - 9].
-                    int box = rand.nextInt(10);
-                    int boy = rand.nextInt(10);
-                    if (box == x && boy == y) {
-                        i--;
-                        continue;
-                    }
-                    game[box][boy].bomb = true;
-                }
-                callNoBomb(game);
+                setBombsPlaces(x, y);
             }
             int d;
             do {
@@ -207,10 +212,10 @@ public class Minisweaper {
                 if (game[x][y].bomb) {
                     System.out.println("You Lost");
                     System.out.println(calculateScore(game));
-                    printNshow(game);
+                    printNshow();
                     break;
                 }
-                floodfill(x,y,w,k);
+                floodfill(x,y);
             }
             if (d == 3) {
                 if (game[x][y].isFlaged) {
