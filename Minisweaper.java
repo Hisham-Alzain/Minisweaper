@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
+ */
 package aggrigation.minisweaper;
 
 import java.io.*;
@@ -31,7 +35,7 @@ public class Minisweaper {
         }
     }
 
-    public static int calculateScore(cell[][] game) {
+    public static int calculateScore() {
         int score = 0;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -144,7 +148,7 @@ public class Minisweaper {
         if (w == 1) {
             game = men.load(game);
         }
-        while (!allNumShown(game)) {
+        while (!allNumShown()) {
             print(game);
             int x, y;
             try {
@@ -211,7 +215,7 @@ public class Minisweaper {
             if (d == 2) {
                 if (game[x][y].bomb) {
                     System.out.println("You Lost");
-                    System.out.println(calculateScore(game));
+                    System.out.println(calculateScore());
                     printNshow();
                     break;
                 }
@@ -255,7 +259,7 @@ public class Minisweaper {
                             System.out.println("Player 2 score is "+score2);
                             }
                             else
-                                System.out.println("Your Score is "+calculateScore(game));
+                                System.out.println("Your Score is "+calculateScore());
                             break;
                         } else if (h == 3) {
                             System.out.println("Enter file name (must have txt extintion)");
@@ -300,14 +304,14 @@ public class Minisweaper {
                 }
               k++;  
             }
-             if (allNumShown(game)) {
+             if (allNumShown()) {
                 System.out.println("You have won");
                 if(w==2){
                     System.out.println("Player 1 score is "+score1);
                     System.out.println("Player 2 score is "+score2);
                 }
                 else
-                    System.out.println("Your Score is "+calculateScore(game));
+                    System.out.println("Your Score is "+calculateScore());
             }
         }
     }
