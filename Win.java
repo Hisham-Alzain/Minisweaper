@@ -1,7 +1,9 @@
-package com.example;
+package aggrigation.minisweaper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Win {
     Button b1;
@@ -21,6 +23,20 @@ public class Win {
         b1.setBackground(new Color(20, 40, 70));
         b1.setForeground(Color.white);
         b1.setBorder(BorderFactory.createEtchedBorder(new Color(50, 70, 100), Color.white));
+        //Play again
+        b1.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame jf=new JFrame();
+                 GUI g=new GUI();
+                 jf.add(g);
+                 ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
+                 jf.setIconImage(img.getImage());
+                 jf.setSize(1920, 1080);
+                 jf.setVisible(true);
+                 winframe.dispose();
+            }
+        });
         JButton b2 = new JButton("Quit Game");
         b2.setFont(new Font("Comic Sans", Font.BOLD, 48));
         b2.setBounds(818, 800, 300, 80);
@@ -28,8 +44,16 @@ public class Win {
         b2.setBackground(new Color(20, 40, 70));
         b2.setForeground(Color.red);
         b2.setBorder(BorderFactory.createEtchedBorder(new Color(50, 70, 100), Color.white));
+        
+        //Quit game 
+        b2.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    winframe.dispose();
+                }
+            });
+        
         winframe.setIconImage(image.getImage());
-        ImageIcon bg = new ImageIcon("winpicc.png");
+        ImageIcon bg = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\rec\\winpicc.png");
         JLabel bk = new JLabel("",bg, JLabel.CENTER);
         bk.setBounds(0,0,1920,1080);
         JPanel pane = new JPanel();
@@ -57,5 +81,4 @@ public class Win {
     }
 
 }
-
 
