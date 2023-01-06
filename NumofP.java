@@ -1,9 +1,9 @@
-package com.example;
+package aggrigation.minisweaper;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-public class NumofP {
+public class NumofP extends JPanel {
     Button solo;
     Button multiplayer;
 
@@ -12,9 +12,9 @@ public class NumofP {
         nframe.setTitle("Minesweeper");
         nframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         nframe.setSize(1920, 1080);
-        ImageIcon image = new ImageIcon("topleft.png");
+        ImageIcon image = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\topleft.png");
         nframe.setIconImage(image.getImage());
-        ImageIcon background4 = new ImageIcon("mode.png");
+        ImageIcon background4 = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\res\\mode.png");
         JLabel label4 = new JLabel("",background4, JLabel.CENTER);
         label4.setBounds(0,0,1920,1080);
 
@@ -28,6 +28,19 @@ public class NumofP {
         solo.setForeground(Color.white);
         solo.setOpaque(true);
         solo.setVisible(true);
+        // solo button action
+        solo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFrame l=new JFrame();
+                Levels t=new Levels();
+                l.add(t);
+                ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
+                    l.setIconImage(img.getImage());
+                    l.setSize(1920, 1080);
+                    l.setVisible(true);
+                    // Close First Frame
+                    l.dispose();
+            }});
         JButton multiplayer = new JButton("MULTIPLAYER");
         multiplayer.setFont(new Font("Arial",Font.BOLD,50));
         multiplayer.setBounds(740, 570, 400, 120);
