@@ -8,6 +8,7 @@ import java.util.Scanner;
  *
  * @author ASUS
  */
+
 public class Minisweaper {
     
     public Minisweaper() {
@@ -20,8 +21,9 @@ public class Minisweaper {
     }
     
     public static cell[][] game = new cell[10][10];
-    public static int score1 = 0, score2 = 0;
+    public static int score1 = 0, score2 = 0,cMoves=1;
     public static void print(cell[][] game) {
+        System.out.println();
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 game[i][j].PrintCell();
@@ -30,7 +32,37 @@ public class Minisweaper {
             System.out.println();
         }
     }
-
+    
+   public static boolean ComputerMove(){
+       Random r=new Random();
+           int x,y;
+       if(cMoves%5==0){
+           do{
+            x=r.nextInt(10);
+            y=r.nextInt(10);
+           }while(!game[x][y].show);
+           if (game[x][y].bomb) {
+                    System.out.println("You Lost");
+                    System.out.println(calculateScore());
+                    printNshow();
+                    cMoves++;
+                    return false;
+           }
+          floodfill(x,y);
+         return true;       
+       }
+       else{
+           do{
+                 x=r.nextInt(10);
+                 y=r.nextInt(10);
+           }while(game[x][y].show || game[x][y].bomb);
+           System.out.println(game[x][y].bomb);System.out.println(game[x][y].show);
+           floodfill(x,y);
+           cMoves++;
+           return true;
+       }
+   }
+    
     public static int calculateScore() {
         int score = 0;
         for (int i = 0; i < 10; i++) {
@@ -143,7 +175,8 @@ public class Minisweaper {
         System.out.println("welcome to minesweaper by y3hw");
         System.out.println("if you want to load a saved game enter 1");
         System.out.println("if you want to start a new multiPlayer game enter 2");
-        System.out.println("if you want to start a new singlePlayer game enter any");
+        System.out.println("if you want to play against an ai enter 3");
+        System.out.println("if you want to start a new singlePlayer game enter any num");
         int w = in.nextInt();
         if (w == 1) {
             game = men.load(game);
@@ -152,13 +185,31 @@ public class Minisweaper {
             print(game);
             int x, y;
             try {
+                // case multiplayer
                 if (w == 2) {
                     if (k % 2 == 0) {
                         System.out.println("Player 1 Enter a cell coordinates ( 0,0 is the first cell)");
                     } else if (k % 2 == 1) {
                         System.out.println("Player 2 Enter a cell coordinates ( 0,0 is the first cell)");
                     }
-                } else {
+                }
+                // case playing vs computer
+                else if(w==3){
+                    if(k%2==0)
+                        System.out.println("Enter a cell coordinates ( 0,0 is the first cell)");
+                    else{
+                        if(ComputerMove()){
+                            k++;
+                            continue;
+                        }
+                        else{
+                                    k++;
+                                    break;
+                              }
+                    }
+                }
+                // case single player
+                else {
                     System.out.println("Enter a cell coordinates ( 0,0 is the first cell)");
                 }
                 String m = in.next();
