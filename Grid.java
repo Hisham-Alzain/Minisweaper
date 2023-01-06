@@ -70,6 +70,7 @@ public class Grid extends JPanel {
         public void mouseClicked(MouseEvent e) {
             if(minis.allNumShown()){
                 // Winning Panel
+                Win w = new Win();
                 System.out.println("you won!");
                 return;
             } else if(SwingUtilities.isRightMouseButton(e)){
