@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
- */
 package aggrigation.minisweaper;
 
 import java.io.*;
@@ -136,7 +132,11 @@ public class Minisweaper {
     public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(System.in);
         int k = 0;
-        
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                game[i][j] = new cell();
+            }
+        }
         int[] movex = {1, 1, 1, 0, 0, -1, -1, -1};
         int[] movey = {1, -1, 0, 1, -1, 0, 1, -1};
         Menu men = new Menu();
