@@ -21,7 +21,7 @@ import java.awt.event.ActionListener;
             fr.setTitle("Minesweeper");
             fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             fr.setSize(1920, 1080);
-            ImageIcon image = new ImageIcon("topleft.png");
+            ImageIcon image = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\topleft.png");
             JButton b1 = new JButton("Try Again");
             b1.setFont(new Font("Arial", Font.BOLD, 48));
             b1.setBounds(818, 708, 300, 80);
@@ -29,6 +29,13 @@ import java.awt.event.ActionListener;
             b1.setBackground(new Color(20, 40, 70));
             b1.setForeground(Color.white);
             b1.setBorder(BorderFactory.createEtchedBorder(new Color(50, 70, 100), Color.white));
+            
+            //try again
+            b2.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    GUI g =new GUI();
+                }
+            });            
             JButton b2 = new JButton("Quit Game");
             b2.setFont(new Font("Comic Sans", Font.BOLD, 48));
             b2.setBounds(818, 800, 300, 80);
@@ -37,7 +44,7 @@ import java.awt.event.ActionListener;
             b2.setForeground(Color.red);
             b2.setBorder(BorderFactory.createEtchedBorder(new Color(50, 70, 100), Color.white));
             fr.setIconImage(image.getImage());
-            ImageIcon bg = new ImageIcon("losepicc.png");
+            ImageIcon bg = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\res\\losepicc.png");
             JLabel bk = new JLabel("",bg, JLabel.CENTER);
             bk.setBounds(0,0,1920,1080);
             JPanel pane = new JPanel();
@@ -62,11 +69,11 @@ import java.awt.event.ActionListener;
             fr.add(b2);
 
             // Quit Button
-        b2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                fr.dispose();
-            }
-        });
+            b2.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    fr.dispose();
+                }
+            });
             
             fr.setLayout(null);
             fr.setVisible(true);
