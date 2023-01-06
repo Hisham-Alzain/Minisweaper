@@ -1,10 +1,10 @@
-package com.example;
+package aggrigation.minisweaper;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
-public class Levels {
+public class Levels extends JPanel {
     Button easy;
     Button medium;
     Button expert;
@@ -14,9 +14,9 @@ public class Levels {
         lframe.setTitle("Minesweeper");
         lframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         lframe.setSize(1920,1080);
-        ImageIcon image = new ImageIcon("topleft.png");
+        ImageIcon image = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\topleft.png");
         lframe.setIconImage(image.getImage());
-        ImageIcon bgr = new ImageIcon("levelff.png");
+        ImageIcon bgr = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\res\\levelff.png");
         JLabel brg = new JLabel("",bgr, JLabel.CENTER);
         brg.setBounds(0,0,1920,1080);
         JButton easy = new JButton("Easy");
@@ -28,6 +28,22 @@ public class Levels {
         easy.setForeground(Color.white);
         easy.setOpaque(true);
         easy.setVisible(true);
+        
+        //easy game
+        easy.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame jf=new JFrame();
+                 Grid g=new Grid();
+                 jf.add(g);
+                 ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
+                 jf.setIconImage(img.getImage());
+                 jf.setSize(1920, 1080);
+                 jf.setVisible(true);
+                 lframe.dispose();
+            }
+        });
+        
         JButton medium = new JButton("Medium");
         medium.setFont(new Font("Arial",Font.BOLD,60));
         medium.setBounds(750, 500, 350, 120);
@@ -37,6 +53,22 @@ public class Levels {
         medium.setForeground(Color.white);
         medium.setOpaque(true);
         medium.setVisible(true);
+        
+        //meduim level
+        medium.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame jf=new JFrame();
+                 Grid g=new Grid();
+                 jf.add(g);
+                 ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
+                 jf.setIconImage(img.getImage());
+                 jf.setSize(1920, 1080);
+                 jf.setVisible(true);
+                 lframe.dispose();
+            }
+        });
+        
         JButton expert = new JButton("Hard");
         expert.setFont(new Font("Arial",Font.BOLD,60));
         expert.setBounds(750, 650, 350, 120);
@@ -52,7 +84,19 @@ public class Levels {
         lframe.add(brg);
         lframe.setVisible(true);
         lframe.setLayout(null);
-
+        expert.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame jf=new JFrame();
+                 Grid g=new Grid();
+                 jf.add(g);
+                 ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
+                 jf.setIconImage(img.getImage());
+                 jf.setSize(1920, 1080);
+                 jf.setVisible(true);
+                 lframe.dispose();
+            }
+        });
 
     }
 }
