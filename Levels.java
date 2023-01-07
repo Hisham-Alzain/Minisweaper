@@ -9,7 +9,8 @@ public class Levels extends JPanel {
     Button medium;
     Button expert;
 
-    public Levels() {
+    public Levels(boolean multi, boolean compMode) {
+        
         JFrame lframe = new JFrame();
         lframe.setTitle("Minesweeper");
         lframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,18 +31,15 @@ public class Levels extends JPanel {
         easy.setVisible(true);
         
         //easy game
-        easy.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame jf=new JFrame();
-                 Grid g=new Grid();
-                 jf.add(g);
-                 ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
-                 jf.setIconImage(img.getImage());
-                 jf.setSize(1920, 1080);
-                 jf.setVisible(true);
-                 lframe.dispose();
-            }
+        easy.addActionListener((ActionEvent e) -> {
+            JFrame jf=new JFrame();
+            Grid g=new Grid(multi, compMode, 9, 9, 10);
+            jf.add(g);
+            ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
+            jf.setIconImage(img.getImage());
+            jf.setSize(1920, 1080);
+            jf.setVisible(true);
+            lframe.dispose();
         });
         
         JButton medium = new JButton("Medium");
@@ -55,18 +53,15 @@ public class Levels extends JPanel {
         medium.setVisible(true);
         
         //meduim level
-        medium.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame jf=new JFrame();
-                 Grid g=new Grid();
-                 jf.add(g);
-                 ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
-                 jf.setIconImage(img.getImage());
-                 jf.setSize(1920, 1080);
-                 jf.setVisible(true);
-                 lframe.dispose();
-            }
+        medium.addActionListener((ActionEvent e) -> {
+            JFrame jf=new JFrame();
+            Grid g=new Grid(multi,compMode, 9, 16, 15);
+            jf.add(g);
+            ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
+            jf.setIconImage(img.getImage());
+            jf.setSize(1920, 1080);
+            jf.setVisible(true);
+            lframe.dispose();
         });
         
         JButton expert = new JButton("Hard");
@@ -84,18 +79,15 @@ public class Levels extends JPanel {
         lframe.add(brg);
         lframe.setVisible(true);
         lframe.setLayout(null);
-        expert.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame jf=new JFrame();
-                 Grid g=new Grid();
-                 jf.add(g);
-                 ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
-                 jf.setIconImage(img.getImage());
-                 jf.setSize(1920, 1080);
-                 jf.setVisible(true);
-                 lframe.dispose();
-            }
+        expert.addActionListener((ActionEvent e) -> {
+            JFrame jf=new JFrame();
+            Grid g=new Grid(multi, compMode, 24, 24, 50);
+            jf.add(g);
+            ImageIcon img = new ImageIcon("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\src\\main\\java\\aggrigation\\minisweaper\\mine.jpg");
+            jf.setIconImage(img.getImage());
+            jf.setSize(1920, 1080);
+            jf.setVisible(true);
+            lframe.dispose();
         });
 
     }
