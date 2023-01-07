@@ -20,6 +20,8 @@ public class Minisweaper extends JPanel {
     public static int playerTurn = 1;
     public static int cMoves = 1;
     public static boolean computerMode = false;
+    public static boolean computerTurn = false;
+    public static boolean winGame = true;
 
     // Rows and Cols Nums
     public static int rows;
@@ -44,8 +46,8 @@ public class Minisweaper extends JPanel {
             }
         }
     }
-    
-        public static cell[][] load(cell[][] game) throws FileNotFoundException, IOException {
+
+    public static cell[][] load(cell[][] game) throws FileNotFoundException, IOException {
 
         while (true) {
             System.out.println("enter file path and name or return by entering ***");
@@ -59,19 +61,19 @@ public class Minisweaper extends JPanel {
                 String s;
                 String[] so;
                 BufferedReader fr = new BufferedReader(new FileReader(f));
-                String rowss[],colss[];
-                String r=fr.readLine();
-                String c=fr.readLine();
-                rowss=r.split(":");
-                colss=c.split(":");
-                int row=Integer.parseInt(rowss[1]);
-                int col=Integer.parseInt(colss[1]);
-                rows=row;
-                cols=col;
-                for (int i = 0; i <row; i++) {
+                String rowss[], colss[];
+                String r = fr.readLine();
+                String c = fr.readLine();
+                rowss = r.split(":");
+                colss = c.split(":");
+                int row = Integer.parseInt(rowss[1]);
+                int col = Integer.parseInt(colss[1]);
+                rows = row;
+                cols = col;
+                for (int i = 0; i < row; i++) {
                     s = fr.readLine();
                     so = s.split(" ");
-                    for (int j = 0; j <col; j++) {
+                    for (int j = 0; j < col; j++) {
                         if (so[j] == "?") {
                             continue;
                         }
@@ -82,34 +84,35 @@ public class Minisweaper extends JPanel {
                         }
                     }
                 }
-                String mul=fr.readLine();
-                String[] h=mul.split(" ");
-                if(h[1]=="true"){
-                    multiPlayerMode=true;
-                    String com=fr.readLine();
-                    String[] g=com.split(" ");
-                    if(g[1]=="true")
-                         computerMode=true;
-                    String p=fr.readLine();
-                    String[] pp=p.split(p);
-                    playerTurn=Integer.parseInt(pp[1]);
-                    String ppp=fr.readLine();
-                    String[] pppp=ppp.split(ppp);
-                    player1Score=Integer.parseInt(pppp[1]);
-                    String ppp2=fr.readLine();
-                    String[] pppp2=ppp2.split(ppp2);
-                    player2Score=Integer.parseInt(pppp2[1]);
+                String mul = fr.readLine();
+                String[] h = mul.split(" ");
+                if (h[1] == "true") {
+                    multiPlayerMode = true;
+                    String com = fr.readLine();
+                    String[] g = com.split(" ");
+                    if (g[1] == "true") {
+                        computerMode = true;
+                    }
+                    String p = fr.readLine();
+                    String[] pp = p.split(p);
+                    playerTurn = Integer.parseInt(pp[1]);
+                    String ppp = fr.readLine();
+                    String[] pppp = ppp.split(ppp);
+                    player1Score = Integer.parseInt(pppp[1]);
+                    String ppp2 = fr.readLine();
+                    String[] pppp2 = ppp2.split(ppp2);
+                    player2Score = Integer.parseInt(pppp2[1]);
                     break;
                 }
-                String com=fr.readLine();
-                String[] g=com.split(" ");
-                if(g[1]=="true"){
-                    computerMode=true;
+                String com = fr.readLine();
+                String[] g = com.split(" ");
+                if (g[1] == "true") {
+                    computerMode = true;
                 }
-                String ppp2=fr.readLine();
-                String[] pppp2=ppp2.split(ppp2);
-                player1Score=Integer.parseInt(pppp2[1]);
-                
+                String ppp2 = fr.readLine();
+                String[] pppp2 = ppp2.split(ppp2);
+                player1Score = Integer.parseInt(pppp2[1]);
+
                 break;
             } else {
                 System.out.println("not here");
@@ -118,8 +121,6 @@ public class Minisweaper extends JPanel {
         return game;
     }
 
-
-    
     public static boolean ComputerMove() throws InterruptedException {
         Random r = new Random();
         int x, y;
@@ -129,7 +130,7 @@ public class Minisweaper extends JPanel {
                 y = r.nextInt(cols);
             } while (!game[x][y].show);
             if (game[x][y].bomb) {
-                System.out.println("You Lost");
+                System.out.println("You Won");
                 System.out.println("Your Score is: ");
                 System.out.println(player1Score);
                 printNshow();
@@ -249,8 +250,11 @@ public class Minisweaper extends JPanel {
             if (playerTurn == 2) {
                 calculatePlayer2Score(game[x][y].NoBomb);
             }
-        } else {
-            // Calculate score in single player game
+        } else if (computerMode && !computerTurn) {
+            // Calculate score in computer mode
+            calculatePlayer1Score(game[x][y].NoBomb);
+        } else if (!computerMode) {
+            // Calculate score in single player mode
             calculatePlayer1Score(game[x][y].NoBomb);
         }
         if (game[x][y].NoBomb == 0) {
@@ -261,6 +265,7 @@ public class Minisweaper extends JPanel {
     }
 
     public static void setBombsPlaces(int x, int y) {
+        System.out.println("in set pla");
         for (int i = 0; i < allBombsNumber; i++) {
             Random rand = new Random();
             // Obtain a number between [0 - 9].
@@ -283,7 +288,6 @@ public class Minisweaper extends JPanel {
             int x, y;
             try {
                 if (multiPlayerMode) {
-
                     if (playerTurn == 1) {
                         System.out.println("Player 1 Enter a cell coordinates ( 0,0 is the first cell)");
                     } else if (playerTurn == 2) {
@@ -291,6 +295,7 @@ public class Minisweaper extends JPanel {
                     }
                 } else if (computerMode) {
                     if (k % 2 == 0) {
+                        computerTurn = false;
                         System.out.println("Enter a cell coordinates ( 0,0 is the first cell)");
                     } else {
                         try {
@@ -354,6 +359,12 @@ public class Minisweaper extends JPanel {
                                 calculatePlayer2Score(-1);
                             }
                         }
+                    } else {
+                        if (game[x][y].bomb == true) {
+                            calculatePlayer1Score(5);
+                        } else {
+                            calculatePlayer1Score(-1);
+                        }
                     }
                 } else {
                     System.out.println("(" + x + "," + y + ") is already flagged");
@@ -362,7 +373,18 @@ public class Minisweaper extends JPanel {
 
             // Click on a cell
             if (d == 2) {
+                System.out.println(player1Score);
+
+                // Set bomb places on first click only
+                if (k == 0) {
+                    setBombsPlaces(x, y);
+                }
+
                 if (game[x][y].bomb) {
+
+                    // winGame = false
+                    winGame = false;
+                    System.out.println("end with false");
 
                     // In MultiPlayer Mode show both players scores
                     if (multiPlayerMode) {
@@ -381,14 +403,10 @@ public class Minisweaper extends JPanel {
 
                     printNshow();
                     break;
+                } else {
+                    floodfill(x, y);
                 }
 
-                // Set bomb places on first click only
-                if (k == 0) {
-                    setBombsPlaces(x, y);
-                }
-
-                floodfill(x, y);
             }
             if (d == 3) {
                 if (game[x][y].isFlaged) {
@@ -431,16 +449,16 @@ public class Minisweaper extends JPanel {
                         break;
                     } else if (h == 3) {
                         try {
-                            String s="";
+                            String s = "";
                             System.out.println("Enter file name and path");
-                            String path=in.next();
-                            File f=new File(path+".txt");
-                            if(f.createNewFile()){
+                            String path = in.next();
+                            File f = new File(path + ".txt");
+                            if (f.createNewFile()) {
                                 FileOutputStream fw = new FileOutputStream(f);
-                                s+="row:"+rows;
-                                s+="\n";
-                                s+="col:"+cols;
-                                s+="\n";
+                                s += "row:" + rows;
+                                s += "\n";
+                                s += "col:" + cols;
+                                s += "\n";
                                 for (int i = 0; i < rows; i++) {
                                     for (int j = 0; j < cols; j++) {
                                         if (game[i][j].show) {
@@ -456,47 +474,46 @@ public class Minisweaper extends JPanel {
                                     }
                                     s += "\r\n";
                                 }
-                                s+="\n";
-                                if(multiPlayerMode){
-                                    s+="IsMultiPlayer: true";
-                                    s+="\n";
-                                    s+="IsComputer: false";
-                                    s+="\n";
-                                    s+="Player Turn: "+playerTurn;
-                                    s+="\n";
-                                    s+="Player1 score: "+player1Score;
-                                    s+="\n";
-                                    s+="Player2 score: "+player2Score;
-                                }else if(computerMode){
-                                    s+="IsMultiPlayer: false";
-                                    s+="\n";
-                                    s+="IsComputer: true";
-                                    s+="\n";
-                                    s+="Player Score: "+player1Score;
-                                }else{
-                                    s+="IsMultiPlayer: false";
-                                    s+="\n";
-                                    s+="IsComputer: false";
-                                    s+="\n";
-                                    s+="Player Score: "+player1Score;
+                                s += "\n";
+                                if (multiPlayerMode) {
+                                    s += "IsMultiPlayer: true";
+                                    s += "\n";
+                                    s += "IsComputer: false";
+                                    s += "\n";
+                                    s += "Player Turn: " + playerTurn;
+                                    s += "\n";
+                                    s += "Player1 score: " + player1Score;
+                                    s += "\n";
+                                    s += "Player2 score: " + player2Score;
+                                } else if (computerMode) {
+                                    s += "IsMultiPlayer: false";
+                                    s += "\n";
+                                    s += "IsComputer: true";
+                                    s += "\n";
+                                    s += "Player Score: " + player1Score;
+                                } else {
+                                    s += "IsMultiPlayer: false";
+                                    s += "\n";
+                                    s += "IsComputer: false";
+                                    s += "\n";
+                                    s += "Player Score: " + player1Score;
                                 }
                                 fw.write(s.getBytes());
                                 fw.flush();
                                 fw.close();
                                 System.out.println("Your game is saved");
-                                break; 
-                            }else{
+                                break;
+                            } else {
                                 System.out.println("file not created");
                             }
+                        } catch (IOException e) {
+                            System.out.println(e);
                         }
-                            catch (IOException e) {
-                                  System.out.println(e);
-                            }
-                    
-                    }         
-                }catch (NumberFormatException e) {
-                                    System.out.println(e);
-                        }
+
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println(e);
+                }
             }
             if (d == 5) {
                 continue;
@@ -512,8 +529,8 @@ public class Minisweaper extends JPanel {
             }
             k++;
         }
-            
-        if (allNumShown()) {
+        if (allNumShown() && winGame) {
+
             if (multiPlayerMode) {
                 System.out.println("Player 1 score is " + player1Score);
                 System.out.println("Player 2 score is " + player2Score);
@@ -540,7 +557,8 @@ public class Minisweaper extends JPanel {
 
         // Load Game
         if (w == 1) {
-            game=load(game);
+            game = load(game);
+
             startGame();
         } else {
 
@@ -561,9 +579,9 @@ public class Minisweaper extends JPanel {
             int levelInput = in.nextInt();
 
             if (levelInput == 1) {
-                rows = 9;
-                cols = 9;
-                allBombsNumber = 10;
+                rows = 5;
+                cols = 5;
+                allBombsNumber = 2;
 
             } else if (levelInput == 2) {
                 rows = 9;
