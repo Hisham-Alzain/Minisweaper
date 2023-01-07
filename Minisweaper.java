@@ -44,8 +44,83 @@ public class Minisweaper extends JPanel {
             }
         }
     }
+    
+        public static cell[][] load(cell[][] game) throws FileNotFoundException, IOException {
 
-    public static boolean ComputerMove() {
+        while (true) {
+            System.out.println("enter file path and name or return by entering ***");
+            Scanner in = new Scanner(System.in);
+            String fname = in.next();
+            if (fname == "***") {
+                break;
+            }
+            File f = new File(fname);
+            if (f.exists()) {
+                String s;
+                String[] so;
+                BufferedReader fr = new BufferedReader(new FileReader(f));
+                String rowss[],colss[];
+                String r=fr.readLine();
+                String c=fr.readLine();
+                rowss=r.split(":");
+                colss=c.split(":");
+                int row=Integer.parseInt(rowss[1]);
+                int col=Integer.parseInt(colss[1]);
+                rows=row;
+                cols=col;
+                for (int i = 0; i <row; i++) {
+                    s = fr.readLine();
+                    so = s.split(" ");
+                    for (int j = 0; j <col; j++) {
+                        if (so[j] == "?") {
+                            continue;
+                        }
+                        if (so[j] == "F") {
+                            game[i][j].isFlaged = true;
+                        } else {
+                            game[i][j].show = true;
+                        }
+                    }
+                }
+                String mul=fr.readLine();
+                String[] h=mul.split(" ");
+                if(h[1]=="true"){
+                    multiPlayerMode=true;
+                    String com=fr.readLine();
+                    String[] g=com.split(" ");
+                    if(g[1]=="true")
+                         computerMode=true;
+                    String p=fr.readLine();
+                    String[] pp=p.split(p);
+                    playerTurn=Integer.parseInt(pp[1]);
+                    String ppp=fr.readLine();
+                    String[] pppp=ppp.split(ppp);
+                    player1Score=Integer.parseInt(pppp[1]);
+                    String ppp2=fr.readLine();
+                    String[] pppp2=ppp2.split(ppp2);
+                    player2Score=Integer.parseInt(pppp2[1]);
+                    break;
+                }
+                String com=fr.readLine();
+                String[] g=com.split(" ");
+                if(g[1]=="true"){
+                    computerMode=true;
+                }
+                String ppp2=fr.readLine();
+                String[] pppp2=ppp2.split(ppp2);
+                player1Score=Integer.parseInt(pppp2[1]);
+                
+                break;
+            } else {
+                System.out.println("not here");
+            }
+        }
+        return game;
+    }
+
+
+    
+    public static boolean ComputerMove() throws InterruptedException {
         Random r = new Random();
         int x, y;
         if (cMoves % 5 == 0) {
@@ -54,11 +129,12 @@ public class Minisweaper extends JPanel {
                 y = r.nextInt(cols);
             } while (!game[x][y].show);
             if (game[x][y].bomb) {
-                System.out.println("You Won");
+                System.out.println("You Lost");
                 System.out.println("Your Score is: ");
                 System.out.println(player1Score);
                 printNshow();
                 cMoves++;
+                Thread.sleep(2000);
                 return false;
             }
             floodfill(x, y);
@@ -68,10 +144,9 @@ public class Minisweaper extends JPanel {
                 x = r.nextInt(rows);
                 y = r.nextInt(cols);
             } while (game[x][y].show || game[x][y].bomb);
-            System.out.println(game[x][y].bomb);
-            System.out.println(game[x][y].show);
             floodfill(x, y);
             cMoves++;
+            Thread.sleep(2000);
             return true;
         }
     }
@@ -218,12 +293,16 @@ public class Minisweaper extends JPanel {
                     if (k % 2 == 0) {
                         System.out.println("Enter a cell coordinates ( 0,0 is the first cell)");
                     } else {
-                        if (ComputerMove()) {
-                            k++;
-                            continue;
-                        } else {
-                            k++;
-                            break;
+                        try {
+                            if (ComputerMove()) {
+                                k++;
+                                continue;
+                            } else {
+                                k++;
+                                break;
+                            }
+                        } catch (InterruptedException e) {
+                            System.out.println(e);
                         }
                     }
 
@@ -316,7 +395,7 @@ public class Minisweaper extends JPanel {
                     game[x][y].isFlaged = false;
                     game[x][y].show = false;
                     if (multiPlayerMode) {
-                        if (!game[x][y].bomb) {
+                        if (game[x][y].bomb) {
                             if (playerTurn == 1) {
                                 calculatePlayer1Score(5);
                             } else {
@@ -347,18 +426,21 @@ public class Minisweaper extends JPanel {
                             System.out.println("Player 1 score is " + score1);
                             System.out.println("Player 2 score is " + score2);
                         } else {
-                            System.out.println("Your Score is " + calculateScore());
+                            System.out.println("Your Score is " + score1);
                         }
                         break;
                     } else if (h == 3) {
-                        System.out.println("Enter file name (must have txt extintion)");
-                        String name = in.next();
-
                         try {
-                            File f = new File("D:\\ITE\\سنة 2\\برمجة 3\\minisweaper\\Savedgames\\" + name);
-                            if (f.createNewFile()) {
+                            String s="";
+                            System.out.println("Enter file name and path");
+                            String path=in.next();
+                            File f=new File(path+".txt");
+                            if(f.createNewFile()){
                                 FileOutputStream fw = new FileOutputStream(f);
-                                String s = "";
+                                s+="row:"+rows;
+                                s+="\n";
+                                s+="col:"+cols;
+                                s+="\n";
                                 for (int i = 0; i < rows; i++) {
                                     for (int j = 0; j < cols; j++) {
                                         if (game[i][j].show) {
@@ -374,19 +456,47 @@ public class Minisweaper extends JPanel {
                                     }
                                     s += "\r\n";
                                 }
+                                s+="\n";
+                                if(multiPlayerMode){
+                                    s+="IsMultiPlayer: true";
+                                    s+="\n";
+                                    s+="IsComputer: false";
+                                    s+="\n";
+                                    s+="Player Turn: "+playerTurn;
+                                    s+="\n";
+                                    s+="Player1 score: "+player1Score;
+                                    s+="\n";
+                                    s+="Player2 score: "+player2Score;
+                                }else if(computerMode){
+                                    s+="IsMultiPlayer: false";
+                                    s+="\n";
+                                    s+="IsComputer: true";
+                                    s+="\n";
+                                    s+="Player Score: "+player1Score;
+                                }else{
+                                    s+="IsMultiPlayer: false";
+                                    s+="\n";
+                                    s+="IsComputer: false";
+                                    s+="\n";
+                                    s+="Player Score: "+player1Score;
+                                }
                                 fw.write(s.getBytes());
                                 fw.flush();
                                 fw.close();
                                 System.out.println("Your game is saved");
-                                break;
+                                break; 
+                            }else{
+                                System.out.println("file not created");
                             }
-                        } catch (IOException e) {
-                            System.out.println(e);
                         }
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println(e);
-                }
+                            catch (IOException e) {
+                                  System.out.println(e);
+                            }
+                    
+                    }         
+                }catch (NumberFormatException e) {
+                                    System.out.println(e);
+                        }
             }
             if (d == 5) {
                 continue;
@@ -402,6 +512,7 @@ public class Minisweaper extends JPanel {
             }
             k++;
         }
+            
         if (allNumShown()) {
             if (multiPlayerMode) {
                 System.out.println("Player 1 score is " + player1Score);
@@ -429,8 +540,7 @@ public class Minisweaper extends JPanel {
 
         // Load Game
         if (w == 1) {
-            game = men.load(game);
-
+            game=load(game);
             startGame();
         } else {
 
