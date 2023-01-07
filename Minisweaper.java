@@ -54,7 +54,7 @@ public class Minisweaper extends JPanel {
                 y = r.nextInt(cols);
             } while (!game[x][y].show);
             if (game[x][y].bomb) {
-                System.out.println("You Lost");
+                System.out.println("You Won");
                 System.out.println("Your Score is: ");
                 System.out.println(player1Score);
                 printNshow();
@@ -316,7 +316,7 @@ public class Minisweaper extends JPanel {
                     game[x][y].isFlaged = false;
                     game[x][y].show = false;
                     if (multiPlayerMode) {
-                        if (game[x][y].bomb) {
+                        if (!game[x][y].bomb) {
                             if (playerTurn == 1) {
                                 calculatePlayer1Score(5);
                             } else {
